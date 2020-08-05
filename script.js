@@ -1,6 +1,4 @@
 
-console.log("script.JS");
-
 var city = "";
 var searchCities = [];
 const apiKey = "6c7bd75f0b7efcb494d549d431b41900";
@@ -16,7 +14,6 @@ function displayWeather(responce){
   //clear cities
   $("#search-city").empty();
   //for loop to add cities
-  console.log("before for loop" + searchCities)
   for (let i = 0; i < searchCities.length; i++) {
     var listEl = $("<li class='list-group-item'>").text(searchCities[i]);
     $("#search-city").append(listEl);
@@ -45,21 +42,17 @@ function displayWeather(responce){
   
   //for loop to loop through each day
   for(i = 0; i < 5; i++){
-    //console.log("for loop " +i);
     var cardEl = $("<div class='card col-md-2.4'>");
     var cardBodyEl =$("<div class='card-body'>");
     cardBodyEl.append($("<h5 class='card-title'>").text(moment.unix(cityData.daily[i].dt).format("MM/DD/YYYY")));
     cardBodyEl.append($("<p>").text("icon goes here"));
     cardBodyEl.append($("<p>").text("Tempurature: "+cityData.daily[i].temp.day));
     cardBodyEl.append($("<p>").text("Humidity: "+cityData.daily[i].humidity));
-    //console.log(cardBodyEl);
-
+    
     //append to document
     cardEl.append(cardBodyEl);
-    //console.log(cardEl);
     cardsEl.append(cardEl);
-    //console.log(cardsEl);
-  };
+    };
 
   $("#display-data").append(cardsEl);
 }
@@ -121,3 +114,7 @@ $("#searchBtn").on("click", function(event){
   weatherAPICalls(city);
 });
 
+$("#search-city").on("click", function(event){
+  city = event.target.innerText;
+  weatherAPICalls(city);
+});
