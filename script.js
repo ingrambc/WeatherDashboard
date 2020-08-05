@@ -105,6 +105,12 @@ function weatherAPICalls(city){
   });
 }
 
+//initialize page with Denver
+function initialize(){
+  city = "Denver";
+  weatherAPICalls(city);
+}
+
 //event listener for search
 $("#searchBtn").on("click", function(event){
   event.preventDefault();
@@ -118,3 +124,5 @@ $("#search-city").on("click", function(event){
   city = event.target.innerText;
   weatherAPICalls(city);
 });
+
+initialize();
