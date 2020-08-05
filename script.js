@@ -12,6 +12,17 @@ function displaynotFound(){
 }
 
 function displayWeather(responce){
+  //get stored cities
+  //clear cities
+  $("#search-city").empty();
+  //for loop to add cities
+  console.log("before for loop" + searchCities)
+  for (let i = 0; i < searchCities.length; i++) {
+    var listEl = $("<li class='list-group-item'>").text(searchCities[i]);
+    $("#search-city").append(listEl);
+  };
+
+
   //empty all data in display
   $("#display-data").empty();
 
@@ -34,20 +45,20 @@ function displayWeather(responce){
   
   //for loop to loop through each day
   for(i = 0; i < 5; i++){
-console.log("for loop " +i);
+    //console.log("for loop " +i);
     var cardEl = $("<div class='card col-md-2.4'>");
     var cardBodyEl =$("<div class='card-body'>");
     cardBodyEl.append($("<h5 class='card-title'>").text(moment.unix(cityData.daily[i].dt).format("MM/DD/YYYY")));
     cardBodyEl.append($("<p>").text("icon goes here"));
     cardBodyEl.append($("<p>").text("Tempurature: "+cityData.daily[i].temp.day));
     cardBodyEl.append($("<p>").text("Humidity: "+cityData.daily[i].humidity));
-console.log(cardBodyEl);
+    //console.log(cardBodyEl);
 
     //append to document
     cardEl.append(cardBodyEl);
-console.log(cardEl);
+    //console.log(cardEl);
     cardsEl.append(cardEl);
-console.log(cardsEl);
+    //console.log(cardsEl);
   };
 
   $("#display-data").append(cardsEl);
@@ -55,11 +66,19 @@ console.log(cardsEl);
 
 
 function addCity(city){
-  city = city.toUpperCase();
+  storedCities = JSON.parse(localStorage.getItem("storedCities"));
+  if(storedCities !== null){
+    searchCities = storedCities;
+  }
+
+  city = this.city.toUpperCase();
   var index = searchCities.indexOf(city);
-  if(index !== -1){
+  if(index === -1){
     searchCities.push(city);
   };
+console.log("sec "+searchCities);
+  localStorage.setItem("storedCities", JSON.stringify(searchCities));
+
 
 }
 
@@ -79,14 +98,14 @@ function weatherAPICalls(city){
       displaynotFound();
     }else{
       //add city to search array
-      addCity(city)
+      addCity(city);
 
       //call using lat and long to get the needed data
       $.ajax({
         url: "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&exclude=minutely,hourly&appid="+apiKey,
         method: "GET"
       }).then(function(responce){
- console.log(responce);
+      //console.log(responce);
         displayWeather(responce);
       });
     };
@@ -94,11 +113,9 @@ function weatherAPICalls(city){
 }
 
 //event listener for search
-
 $("#searchBtn").on("click", function(event){
   event.preventDefault();
-  console.log("entered Event");
-  
+    
   city = $("#inputCity").val().trim();
 
   weatherAPICalls(city);
