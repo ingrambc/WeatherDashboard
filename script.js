@@ -79,7 +79,7 @@ function weatherAPICalls(city){
   var city = this.city;
 
   $.ajax({
-    url: "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey,
+    url: "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey,
     method: "GET"
   }).then(function(responce){
     var lat = responce.coord.lat;
